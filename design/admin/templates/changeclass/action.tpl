@@ -24,7 +24,7 @@ class '{$dest_class_name}'.<br /><br />
 
 <i>Command line command for running this script would be like this:</i><br />
 <pre>
-php extension/ezchangeclass/scripts/classconvert.php -s example --param-file={$convert_file_name}
+php extension/ezchangeclass/scripts/classconvert.php -s {$current_siteaccess} --param-file={$convert_file_name}
 </pre>
 Notice:<br />
 * Switch 'example' with the name of your siteaccess, preferably the one you are using right now!<br />&nbsp; ( so your sure it uses same db and cache folder )<br />

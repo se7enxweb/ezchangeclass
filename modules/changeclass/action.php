@@ -228,13 +228,14 @@ if ( $http->hasPostVariable( 'GenerateConsoleParameters' ) )
     $file_path = eZSys::cacheDirectory();
     
     $r = eZFile::create( $file_name, $file_path, $file_content );
-    
+    $current_siteaccess = eZSiteAccess::current();
     $tpl = eZTemplate::factory();
     $tpl->setVariable( 'redir_uri', 'content/view/full/' . $redir_node );
     $tpl->setVariable( 'dest_class_name', $destClassName );
     $tpl->setVariable( 'source_class_name', $sourceClassName);
     $tpl->setVariable( 'convert_file_ok', $r );
     $tpl->setVariable( 'convert_file_path', $file_path . '/'. $file_name );
+    $tpl->setVariable( 'current_siteaccess', $current_siteaccess['name'] );
     $tpl->setVariable( 'convert_file_name', $file_name );
     $tpl->setVariable( 'convert_file_content',  $file_content );
     $tpl->setVariable( 'source_object_count', $sourceObjectCount );
