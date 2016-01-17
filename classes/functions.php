@@ -251,16 +251,34 @@ class conversionFunctions
 	            // foreach version
 	            foreach ( $objectVersions as $version )
 	            {
-                    if( array_key_exists($value, $sourceObjectDataMap) ) {
-                        $sourceObjectAttr = eZContentObjectAttribute::fetch( $sourceObjectDataMap[$value]->attribute( 'id' ), $version );
-                        if ( !is_object( $sourceObjectAttr ) ) {
+                    if( array_key_exists($value, $sourceObjectDataMap) )
+                    {
+                        //echo "<br />dataMap: ".$sourceObjectDataMap[$value]->ID . "  ver: " . $version;
+                        $sourceObjectAttr = eZContentObjectAttribute::fetch(
+                            $sourceObjectDataMap[$value]->attribute( 'id' ),
+                            $version
+                        );
+                        if ( !is_object( $sourceObjectAttr ) )
+                        {
                             // echo("skip version");
                             continue;
                         }
-                        $sourceObjectAttr->setAttribute( 'contentclassattribute_id', $destClassDataMap[$key]->attribute( 'id' ) );
-                        conversionFunctions::customConverter( $sourceObjectAttr, $sourceObjectDataMap[$value], $destClassDataMap[$key] );
+                        if ( !$destClassDataMap[$key] instanceOf eZContentClassAttribute )
+                        {
+                            throw new Exception( "Class attribute $key not found" );
+                        }
+                        $sourceObjectAttr->setAttribute(
+                            'contentclassattribute_id',
+                            $destClassDataMap[$key]->attribute( 'id' )
+                        );
+                        conversionFunctions::customConverter(
+                            $sourceObjectAttr,
+                            $sourceObjectDataMap[$value],
+                            $destClassDataMap[$key]
+                        );
                         $sourceObjectAttr->store();
                     }
+		            //eZLog::write(print_r( $sourceObjectAttr, 1 ),'cc.log');
 	            }
 	        }
 	        // adding extra attributes in case when source attribute has been selected to be copied
@@ -329,14 +347,18 @@ class conversionFunctions
 	            {
 		            foreach ( $objectVersions as $version )
 		            {
-                        if( array_key_exists($oldAttr, $sourceObjectDataMap) ) {
-                            $attributeID = $sourceObjectDataMap[$oldAttr]->attribute( 'id' );
-                            $oldAttribute = eZContentObjectAttribute::fetch( $attributeID, $version );
-                            //eZLog::write('removing: id: ' . $attributeID .' - version: '.$version );
-                            if ( is_object( $oldAttribute ) ) {
-                                $oldAttribute->removeThis( $attributeID );
-                            }
+			            if ( !$sourceObjectDataMap[$oldAttr] instanceOf eZContentObjectAttribute )
+                        {
+                            eZCLI::instance()->error( "Old attribute $oldAttr not found in {$version->ID}" );
+                            continue;
                         }
+                        $attributeID = $sourceObjectDataMap[$oldAttr]->attribute( 'id' );
+		                $oldAttribute = eZContentObjectAttribute::fetch( $attributeID, $version );
+			            //eZLog::write('removing: id: ' . $attributeID .' - version: '.$version );
+		                if ( is_object( $oldAttribute ) )
+		                {
+		                    $oldAttribute->removeThis( $attributeID );
+		                }
 		            }
 	            }
 	        }
