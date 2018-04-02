@@ -28,7 +28,7 @@ class conversionFunctions
 {
     var $simpleConversionArray = false;
     
-    function conversionFunctions()
+    function __construct()
     {
     }
 
