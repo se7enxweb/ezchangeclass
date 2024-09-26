@@ -68,7 +68,7 @@ class conversionFunctions
     }
 
 
-    function customConverter( &$newObjectAttr, $sourceObjectAttr, $destObjectAttr )
+    static function customConverter( &$newObjectAttr, $sourceObjectAttr, $destObjectAttr )
     {
         // We need to look for custom translation scripts if the datatype differs
         if ( $sourceObjectAttr->attribute( 'data_type_string' ) != $destObjectAttr->attribute( 'data_type_string' ) )
@@ -136,7 +136,8 @@ class conversionFunctions
             }
         }    
     }
-    function convertObject( $sourceObjectID, $destinationClassID, $mapping )
+
+    static function convertObject( $sourceObjectID, $destinationClassID, $mapping )
     {
     
        $sourceObject = eZContentObject::fetch( $sourceObjectID );
